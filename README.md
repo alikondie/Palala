@@ -11,6 +11,7 @@ and win the game anyway.
 Each player has 20 seconds to make a decision, the game is 8 minutes long.
 
 1.To choose to play a random token in a empty case, click on 1 dé, the color that you have to play will be highlighted in orange.
+
 2.To choose to permutate two random tokens, click on 2 dé, one color will be highlighted in orange and the other in light green.
 
 

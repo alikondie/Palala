@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Palala</title>
+</head>
+<body>
+<canvas id="myCanvas" width="550" height="500">
+Sorry, your browser doesn't support canvas technology
+ </canvas>
+<script type="text/javascript">
+	canvas = document.getElementById("myCanvas");
+	var rectState = 0;	// tells us if the player has chosen to play one or two dices (variable name is not relevant x) )
+	var dice1Res = -1;	// this var detects the result of throwing dice n°1
+	var dice2Res = -1;	// this var detects the result of throwing dice n°1
+	var eightMinutes = Math.floor(new Date().getTime() + 8*60*1000); // time of the game
+	var twenty = Math.floor(new Date().getTime() + 20 * 1000);	// time for the player to play his turn 
+	var notLucky = false; // if the two dices has the same number this var will be assigned temporarily with true
+	var scoreJoueurs = [0,0,0];
+	if (canvas.getContext) {
+	// Specify 2d canvas type.
+		ground = canvas.getContext("2d"); 
+		scoreBoard = canvas.getContext("2d");
+		text = canvas.getContext("2d");
+		stats = canvas.getContext("2d");
+	}
+var playGround = {	// board table
+	board : [[1,1,6,2,2],
+	[1,6,6,6,2],
+	[5,6,5,6,5],
+	[4,6,6,6,3],
+	[4,4,6,3,3]
+],
+	isChosen : [ // has the player chosen a particular token or position, if so it's assigned with true
+	[false,false,false,false,false],
+	[false,false,false,false,false],
+	[false,false,false,false,false],
+	[false,false,false,false,false],
+	[false,false,false,false,false]
+	],
+
+	isPossible :[  // is it possible that the player can choose this position, if so it's assigned with 1 or 2
+	[0,0,0,0,0],
+	[0,0,0,0,0],
+	[0,0,0,0,0],
+	[0,0,0,0,0],
+	[0,0,0,0,0]
+	],
+chooseToken: function(row,col){ // assigns isChosen with true
+	isChosen[row][col] = true;
+}
+};	
+	// General creation of the interface, it's static not dynamic so if you move one pixel everything changes
+	scoreBoard.fillStyle = "#b8c2d3";
+	scoreBoard.clearRect(375,0,500,375);
+	scoreBoard.beginPath();
+	scoreBoard.rect(375,0,500,375);
+	scoreBoard.closePath();
+	scoreBoard.stroke();
+	scoreBoard.fill();	
+	text.fillStyle = "#000000";
+	text.font = "20px Tahoma";
+	text.fillText("Tour du joueur",395,40);
+	text.fillText("[1]",445,70);	
+	text.fillText("1 Dé",400,190);	
+	text.fillText("2 Dés",470,190);
+	text.fillText("Score",430,290);
+	text.fillText("J1 |",425,320);
+	text.fillText("J2",465,320);
+	text.fillText(scoreJoueurs[0]+"  |",430,350);
+	text.fillText(scoreJoueurs[1],470,350);			
+// this function could be called game or update like draw() in processing
+function Board(){
+	makeChoice(rectState);
+	stats.fillStyle = "#b8c2d3";
+	stats.clearRect(0,375,550,500);
+	stats.beginPath();
+	stats.rect(0,375,550,500);
+	stats.closePath();
+	stats.fill();		
+	Timer(); // 8 minutes 
+	TimerT(); // 20 secondes 
+	text.fillText("Temps de la partie",320,400);
+	text.fillText("Temps du joueur",60,400);		
+	for(var i = 1; i < 5; i++){
+	ground.beginPath();
+	ground.moveTo(i*75,0);
+	ground.lineTo(i*75,375);
+	ground.stroke();	
+	ground.beginPath();
+	ground.moveTo(0,i*75);
+	ground.lineTo(375,i*75);
+	ground.stroke();	
+	}
+	for (var i = 0 ; i < 5; i++) {
+		for(var j = 0; j <5; j++){
+			ground.beginPath();
+			var grd = ground.createRadialGradient(75 * j + 37,75 *i +37,18,75 * j + 37,75 * i +37,25);			
+			if(playGround.board[i][j] != 6){
+				ground.arc(75 * j + 37,75*i +37,25,0,2*Math.PI);
+			switch(playGround.board[i][j]){
+				case 1: grd.addColorStop(0,"#1334db");break;//ground.fillStyle = "#1334db";break;
+				case 2: grd.addColorStop(0,"#fcde00");break;//ground.fillStyle = "#fcde00";break;
+				case 3: grd.addColorStop(0,"#202322");break;//ground.fillStyle = "#000000";break;
+				case 4: grd.addColorStop(0,"#c90808");break;//ground.fillStyle = "#c90808";break; 
+				case 5: grd.addColorStop(0,"#1a6b02");break;//ground.fillStyle = "#1a6b02";break; 
+			}
+		grd.addColorStop(1,"black");
+		ground.fillStyle = grd;
+		ground.stroke();
+		ground.fill();}}
+	}
+ 	}
+
+setInterval(Board,20);
+
+</script>
+<script src="Rules.js"></script>
+</html>
